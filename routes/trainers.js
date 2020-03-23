@@ -1,10 +1,15 @@
+const { Sequelize } = require('sequelize');
 const express = require('express');
 const router = express.Router();
+const config = require('config');
 const {param, validationResult} = require('express-validator');
 const Trainer = require('../models/Trainer');
 const CaughtPokemon = require('../models/CaughtPokemon');
 const SelectedPokemon = require('../models/SelectedPokemon');
 
+const pgURI = config.get('pgURI');
+
+const sequelize = new Sequelize(pgURI);
 
 // @route     GET at /api/trainers
 // @desc      GET all trainers
@@ -29,19 +34,22 @@ router.get('/:id',
   const id = req.params.id;
   try {
     const trainer = await Trainer.findByPk(id);
-    const caughtPokemons = await CaughtPokemon.findAll({
+    const caughtPokemonsCount = await CaughtPokemon.findAll({
       where: {
         trainer_id: id
-      }
+      },
+      attributes: [sequelize.fn('count', sequelize.col('id'))],
+      raw: true
     });
     const selectedPokemons = await SelectedPokemon.findAll({
       where: {
         trainer_id: id
       }
     });
+    console.log(caughtPokemonsCount);
     res.json({
       trainer,
-      numberOfCaughtPokemons: caughtPokemons.length,
+      caughtPokemonsCount,
       selectedPokemons
     });
   } catch(error) {
