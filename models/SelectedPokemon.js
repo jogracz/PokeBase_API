@@ -4,34 +4,25 @@ const config = require('config');
 const pgURI = config.get('pgURI');
 const sequelize = new Sequelize(pgURI);
 
-const Trainer = sequelize.define('trainer',{
+const SelectedPokemon = sequelize.define('selected_pokemon',{
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     allowNull: false
   },
-  nickname: {
-    type: DataTypes.STRING,
+  caught_pokemon_id: {
+    //reference caught_pokemons
+    type: DataTypes.INTEGER,
     allowNull: false
   },
-  email: {
-    type: DataTypes.STRING,
+  trainer_id: {
+    //reference trainer
+    type: DataTypes.INTEGER,
     allowNull: false
   },
-  country: {
-    type: DataTypes.STRING
-  },
-  city: {
-    type: DataTypes.STRING
-  },
-  street_name: {
-    type: DataTypes.STRING
-  },
-  street_number: {
-    type: DataTypes.STRING
-  },
-  postcode: {
-    type: DataTypes.STRING
+  pokemon_order: {
+    type: DataTypes.INTEGER,
+    allowNull: false
   }
 },
 {
@@ -41,8 +32,8 @@ const Trainer = sequelize.define('trainer',{
 
 // const synchronize = async() => {
 //   try {
-//     await Trainer.sync();
-//     console.log("The Trainer model was just synchronized!");
+//     await SelectedPokemon.sync();
+//     console.log("The SelectedPokemon model was just synchronized!");
 //   } catch (error) {
 //     console.error('Unable to sync the model', error);
 //   }
@@ -50,4 +41,4 @@ const Trainer = sequelize.define('trainer',{
 
 // synchronize();
 
-module.exports = Trainer;
+module.exports = SelectedPokemon;

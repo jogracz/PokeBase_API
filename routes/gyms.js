@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const {param, validationResult} = require('express-validator');
 const Gym = require('../models/Gym');
-const {param, validationResult} = require('express-validator/check');
 
 // @route     GET at /api/gyms
 // @desc      GET all gyms
