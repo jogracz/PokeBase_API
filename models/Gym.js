@@ -1,6 +1,9 @@
 const { Sequelize, DataTypes } = require('sequelize');
+const config = require('config');
 
-const sequelize = new Sequelize('postgres://postgres:asia123@localhost:5432/poke_base');
+const pgURI = config.get('pgURI');
+
+const sequelize = new Sequelize(pgURI);
 
 const Gym = sequelize.define('gym',{
   id: {

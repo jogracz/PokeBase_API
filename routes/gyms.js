@@ -1,20 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const Gym = require('../models/Gym');
+const {param, validationResult} = require('express-validator/check');
 
 // @route     GET at /api/gyms
 // @desc      GET all gyms
 router.get('/', async (req, res) => {
   const gyms = await Gym.findAll();
-  
-  res.send(`All Gyms: ${JSON.stringify(gyms)}`)
+  res.json({gyms})
 })
 
 // @route     GET at /api/gyms/:id
 // @desc      GET a gyms
-router.get('/:id', async (req, res) => {
+router.get('/:id',
+  param('id', 'Id must be a number').isNumeric(), async (req, res) => {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(400).json({errors:errors.array()});
+  }
   const id = req.params.id;
-  res.send(`Get a Gym}`)
+  const gym = await Gym.findByPk(id)
+  res.json({gym});
 })
 
 module.exports = router;

@@ -1,0 +1,3 @@
+{
+  "pgURI": "postgres://postgres:asia123@localhost:5432/poke_base"
+}

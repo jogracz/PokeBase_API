@@ -1,9 +1,10 @@
 const express = require('express');
 const { Sequelize } = require('sequelize');
-const Gym = require('./models/Gym');
+const config = require('config');
 
+const pgURI = config.get('pgURI');
+const sequelize = new Sequelize(pgURI);
 const app = express();
-const sequelize = new Sequelize('postgres://postgres:asia123@localhost:5432/poke_base');
 
 // Connect and authenticate DB
 const authenticateDB = async () => {
