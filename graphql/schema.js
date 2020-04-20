@@ -5,6 +5,7 @@ const {
   GraphQLInt,
   GraphQLSchema,
   GraphQLList,
+  GraphQLNonNull
 } = require('graphql');
 
 // DataBase Models
@@ -19,17 +20,17 @@ const SelectedPokemon = require('../models/SelectedPokemon');
 const PokemonType = new GraphQLObjectType({
   name: 'Pokemon',
   fields: () => ({
-    id: {type: GraphQLInt},
-    name: {type: GraphQLString}
+    id: {type: GraphQLNonNull(GraphQLInt)},
+    name: {type:  GraphQLNonNull(GraphQLString)}
   })
 })
 // Trainer
 const TrainerType = new GraphQLObjectType({
   name: 'Trainer',
   fields: () => ({
-    id: {type: GraphQLInt},
-    nickname: {type: GraphQLString},
-    email: {type: GraphQLString},
+    id: {type:  GraphQLNonNull(GraphQLInt)},
+    nickname: {type:  GraphQLNonNull(GraphQLString)},
+    email: {type:  GraphQLNonNull(GraphQLString)},
     country: {type: GraphQLString},
     city: {type: GraphQLString},
     street_name: {type: GraphQLString},
@@ -61,31 +62,31 @@ const TrainerType = new GraphQLObjectType({
 const GymType = new GraphQLObjectType({
   name: "Gym",
   fields: () => ({
-    id: {type: GraphQLInt},
-    name: {type: GraphQLString},
-    badge: {type: GraphQLString}
+    id: {type:  GraphQLNonNull(GraphQLInt)},
+    name: {type:  GraphQLNonNull(GraphQLString)},
+    badge: {type:  GraphQLNonNull(GraphQLString)}
   })
 })
 // CaughtPokemon
 const CaughtPokemonType = new GraphQLObjectType({
   name: "CaughtPokemon",
   fields: ()=> ({
-    id: {type: GraphQLInt},
-    pokemon_id: {type: GraphQLInt},
-    trainer_id: {type: GraphQLInt},
+    id: {type:  GraphQLNonNull(GraphQLInt)},
+    pokemon_id: {type:  GraphQLNonNull(GraphQLInt)},
+    trainer_id: {type:  GraphQLNonNull(GraphQLInt)},
     pokemon_gender: {type: GraphQLString},
-    pokemon_level: {type: GraphQLInt},
-    date_caught: {type: GraphQLString},
-    place_caught: {type: GraphQLString},
+    pokemon_level: {type:  GraphQLNonNull(GraphQLInt)},
+    date_caught: {type:  GraphQLNonNull(GraphQLString)},
+    place_caught: {type:  GraphQLNonNull(GraphQLString)},
     pokemon_new_name: {type: GraphQLString},
     pokemon: {
-      type: PokemonType,
+      type:  GraphQLNonNull(PokemonType),
       resolve(parentValue){
         return Pokemon.findByPk(parentValue.pokemon_id)
       }
     },
     trainer: {
-      type: TrainerType,
+      type:  GraphQLNonNull(TrainerType),
       resolve(parentValue){
         return Trainer.findByPk(parentValue.trainer_id)
       }
@@ -97,18 +98,18 @@ const CaughtPokemonType = new GraphQLObjectType({
 const SelectedPokemonType = new GraphQLObjectType({
   name: "SelectedPokemon",
   fields: () => ({
-    id: {type: GraphQLInt},
-    caught_pokemon_id: {type: GraphQLInt},
-    trainer_id: {type: GraphQLInt},
-    pokemon_order: {type: GraphQLInt},
+    id: {type:  GraphQLNonNull(GraphQLInt)},
+    caught_pokemon_id: {type:  GraphQLNonNull(GraphQLInt)},
+    trainer_id: {type:  GraphQLNonNull(GraphQLInt)},
+    pokemon_order: {type:  GraphQLNonNull(GraphQLInt)},
     caught_pokemon: {
-      type: CaughtPokemonType,
+      type:  GraphQLNonNull(CaughtPokemonType),
       resolve(parentValue){
         return CaughtPokemon.findByPk(parentValue.caught_pokemon_id)
       }
     },
     trainer: {
-      type: TrainerType,
+      type:  GraphQLNonNull(TrainerType),
       resolve(parentValue){
         return Trainer.findByPk(parentValue.trainer_id)
       }
@@ -129,7 +130,7 @@ const RootQuery = new GraphQLObjectType({
     pokemon: {
       type: PokemonType,
       args: {
-        id: {type: GraphQLInt}
+        id: {type:  GraphQLNonNull(GraphQLInt)}
       },
       resolve(parentValue, args){
         return Pokemon.findByPk(args.id);
@@ -144,7 +145,7 @@ const RootQuery = new GraphQLObjectType({
     trainer:{
       type: TrainerType,
       args: {
-        id: {type: GraphQLInt}
+        id: {type:  GraphQLNonNull(GraphQLInt)}
       },
       resolve(parentValue, args){
         const trainer = Trainer.findByPk(args.id);
@@ -159,6 +160,9 @@ const RootQuery = new GraphQLObjectType({
     },
     gym: {
       type: GymType,
+      args: {
+        id: {type:  GraphQLNonNull(GraphQLInt)}
+      },
       resolve(parentValue, args){
         return Gym.findByPk(args.id)
       }
@@ -172,7 +176,7 @@ const RootQuery = new GraphQLObjectType({
     caught_pokemon: {
       type: CaughtPokemonType,
       args: {
-        id: {type: GraphQLInt}
+        id: {type: GraphQLNonNull(GraphQLInt)}
       },
       resolve(parentValue, args){
         return CaughtPokemon.findByPk(args.id)
@@ -187,7 +191,7 @@ const RootQuery = new GraphQLObjectType({
     selected_pokemon: {
       type: SelectedPokemonType,
       args: {
-        id: {type: GraphQLInt}
+        id: {type: GraphQLNonNull(GraphQLInt)}
       },
       resolve(parentValue, args){
         return SelectedPokemon.findByPk(args.id)
