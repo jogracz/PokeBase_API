@@ -33,10 +33,10 @@ const TrainerType = new GraphQLObjectType({
     email: {type:  GraphQLNonNull(GraphQLString)},
     country: {type: GraphQLString},
     city: {type: GraphQLString},
-    street_name: {type: GraphQLString},
-    street_number: {type: GraphQLString},
+    streetName: {type: GraphQLString},
+    streetNumber: {type: GraphQLString},
     postcode: {type: GraphQLString},
-    caught_pokemons: {
+    caughtPokemons: {
       type: new GraphQLList(CaughtPokemonType),
       resolve(parentValue){
         return CaughtPokemon.findAll({
