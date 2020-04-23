@@ -1,6 +1,9 @@
 const express = require('express');
+const expressGraphQl = require('express-graphql');
 const { Sequelize } = require('sequelize');
 const config = require('config');
+const schema = require('./graphql/schema');
+
 
 const pgURI = config.get('pgURI');
 const sequelize = new Sequelize(pgURI);
@@ -19,12 +22,16 @@ authenticateDB();
 
 app.get('/', (req,res) => res.json({msg: 'Welcome to the PokeBase API'}));
 
-// Define Routes
+// Define REST Routes
 app.use('/api/gyms', require('./routes/gyms'));
 app.use('/api/trainers', require('./routes/trainers'));
 app.use('/api/pokemons', require('./routes/pokemons'));
 
-
+// GraphQL Route
+app.use('/graphql', expressGraphQl({
+  schema,
+  graphiql: true
+}))
 
 
 const PORT = 5000;
