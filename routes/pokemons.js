@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const {param, validationResult} = require('express-validator');
 const Pokemon = require('../models/Pokemon');
+const cache = require('express-redis-cache')();
 
 // @route     GET at /api/pokemons
 // @desc      GET all pokemons
-router.get('/', async (req, res) => {
+router.get('/', cache.route(), async (req, res) => {
   try {
     const pokemons = await Pokemon.findAll();
     res.json({pokemons});
@@ -17,7 +18,7 @@ router.get('/', async (req, res) => {
 
 // @route     GET at /api/pokemon/:id
 // @desc      GET a pokemon
-router.get('/:id',
+router.get('/:id',cache.route(),
  param('id', 'Id must be a number').isNumeric(), async (req, res) => {
   const errors = validationResult(req);
   if(!errors.isEmpty()) {
